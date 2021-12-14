@@ -1,24 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import Table from './components/Table';
+import { sortByDate } from './helpers/helpers';
+import { fetchCompanies } from './services/api';
 
 function App() {
+  const [companiesData, setCompaniesData] = useState([])
+  const [bookedSlots, setBookedSlots] = useState([])
+
+  const handleBookedSlots = (bookedSlot: never) => {
+
+    let bookedSlotsState = [...bookedSlots]
+    if (bookedSlotsState.indexOf(bookedSlot) === -1) {
+      bookedSlotsState.push(bookedSlot)
+    }
+    else {
+      bookedSlotsState = bookedSlotsState.filter((n) => n != bookedSlot);
+    }
+    console.log(bookedSlotsState)
+    setBookedSlots(bookedSlotsState)
+  }
+
+  useEffect(() => {
+    fetchCompanies().then((data) => {
+      let sortedData: any = sortByDate(data)
+      console.log(sortedData, 'sroted')
+      setCompaniesData(sortedData)
+    });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Table companiesData={companiesData} bookedSlots={bookedSlots} handleBookedSlots={handleBookedSlots} />
     </div>
   );
 }
