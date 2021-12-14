@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import './App.css';
-import Table from './components/Table';
-import { sortByDate } from './helpers/helpers';
-import { fetchCompanies } from './services/api';
+import Table from '../components/Table';
+import { sortByDate } from '../helpers/helpers';
+import { fetchCompanies } from '../services/api';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container } from 'react-bootstrap';
 
-function App() {
+function Booking() {
   const [companiesData, setCompaniesData] = useState([])
   const [bookedSlots, setBookedSlots] = useState([])
 
-  const handleBookedSlots = (bookedSlot: never) => {
-
+  const handleBookedSlots = (bookedSlot: never, id: any) => {
+    console.log(id)
     let bookedSlotsState = [...bookedSlots]
     if (bookedSlotsState.indexOf(bookedSlot) === -1) {
       bookedSlotsState.push(bookedSlot)
     }
     else {
-      bookedSlotsState = bookedSlotsState.filter((n) => n != bookedSlot);
+      bookedSlotsState = bookedSlotsState.filter((n) => n !== bookedSlot);
     }
     console.log(bookedSlotsState)
     setBookedSlots(bookedSlotsState)
@@ -30,10 +31,10 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <Container>
       <Table companiesData={companiesData} bookedSlots={bookedSlots} handleBookedSlots={handleBookedSlots} />
-    </div>
+    </Container>
   );
 }
 
-export default App;
+export default Booking;
